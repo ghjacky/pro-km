@@ -1,0 +1,207 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  name: galaxy:deploy-agent
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - pods
+      - services
+      - endpoints
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - delete
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - events
+      - pods/log
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+      - deployments
+      - daemonsets
+      - replicasets
+      - deployments/scale
+      - statefulsets/scale
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - delete
+      - update
+      - patch
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+      - cronjobs
+    verbs:
+      - get
+      - list
+      - watch
+      - delete
+      - update
+      - patch
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deploy-agent
+  namespace: manage
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: galaxy-deploy-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: galaxy:deploy-agent
+subjects:
+  - kind: ServiceAccount
+    name: deploy-agent
+    namespace: manage
+
+---
+apiVersion: v1
+data:
+  cluster.p12: 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
+kind: Secret
+metadata:
+  name: galaxy-agent-p12-secret
+  namespace: manage
+type: Opaque
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-manager-agent
+  namespace: manage
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "50090"
+spec:
+  ports:
+    - name: http
+      port: 8072
+      protocol: TCP
+      nodePort: 32281
+    - name: metric
+      port: 8090
+      protocol: TCP
+      nodePort: 32291
+    - name: grpc
+      port: 8071
+      protocol: TCP
+      nodePort: 32271
+  selector:
+    app: deploy-agent
+  sessionAffinity: None
+  type: NodePort
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: galaxy-config
+  namespace: manage
+data:
+  config.yaml: |
+    id: prod-test
+    grpcPort: 8071
+    httpPort: 8072
+    workDir: /etc/galaxy/agent/data
+    managerAddr: 172.16.244.6:32270
+    managerCert: /etc/galaxy/pki/cluster.p12
+    managerProviderAddr: "http://172.16.244.6:32280/api/v1/provider"
+    kubeConnection:
+      kubeconfig: ""
+      contentType: application/json
+      qps: 50
+      burst: 100
+    healthzBindAddr: 0.0.0.0:50062
+    metricsBindAddr: 0.0.0.0:50062
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-agent
+  namespace: manage
+  labels:
+    app: deploy-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-agent
+  template:
+    metadata:
+      labels:
+        app: deploy-agent
+    spec:
+      nodeName: "172-16-244-99.xxxxx.cn"
+      containers:
+        - name: deploy-agent
+          image: platform/deploy-agent:ed60805
+          imagePullPolicy: Always
+          command:
+            - /usr/local/bin/deploy-agent
+            - --config=/etc/galaxy/agent/config.yaml
+            - --v=10
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          volumeMounts:
+            - name: pki-volume
+              mountPath: /etc/galaxy/pki
+            - name: cfg-volume
+              mountPath: /etc/galaxy/agent
+            - name: work-volume
+              mountPath: /etc/galaxy/agent/data
+      volumes:
+        - name: cfg-volume
+          configMap:
+            name: galaxy-config
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: pki-volume
+          secret:
+            secretName: galaxy-agent-p12-secret
+        - name: work-volume
+          hostPath:
+            path: /opt/galaxy/agent/data
+      serviceAccountName: deploy-agent
+
+

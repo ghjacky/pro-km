@@ -1,0 +1,16 @@
+# db configuration
+dbType: mysql
+username: root
+password: root
+host: 172.20.10.244
+port: 3306
+schema: deploy_manager
+params:
+  charset: utf8mb4
+  parseTime: True
+  loc: Local
+autoMigrate: true
+logMode: 4
+maxIdleConns: 20
+maxOpenConns: 0
+connMaxLifetime: 0

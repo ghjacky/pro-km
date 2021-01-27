@@ -1,0 +1,8 @@
+deploy/
+test/
+docs/
+.gitlab-ci.yml
+.pre-commit-config.yaml
+.git/
+vendor/
+_output/

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1;
+
+// CmdManager service manage command tunnel
+service CmdManager {
+    // Execute send commands to client to execute
+    rpc Execute (stream CmdPackage) returns (stream CmdPackage) {}
+}
+
+// CmdPackage stream from server to client
+message CmdPackage {
+    string UUID = 1;
+    // Name is the name of cmd
+    string Name = 2;
+    // Type determine the cmdPackage is Request or Response
+    CmdType Type = 3;
+    // Args is tha cmd args, key is args name, value is json content
+    map<string,string> Args = 4;
+    // Caller who call the cmd
+    string Caller = 5;
+    // Executor who execute the cmd
+    string Executor = 6;
+    // Code is the number returned by executor
+    uint32 RespCode = 7;
+    // Data is the result content returned by executor
+    bytes RespData = 8;
+    // Msg is the simple string returned by executor
+    string RespMsg = 9;
+    // Stream specify this cmd if is need return stream
+    bool Stream = 10;
+
+    enum CmdType {
+        REQUEST = 0;
+        RESPONSE = 1;
+    }
+}

@@ -1,0 +1,5 @@
+deb http://mirrors.aliyun.com/ubuntu/ buster main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ buster-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ buster-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ buster-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ buster-backports main restricted universe multiverse

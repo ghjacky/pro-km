@@ -1,0 +1,9 @@
+id: local
+grpcPort: 8071
+httpPort: 8072
+managerProviderAddr: "http://172.16.244.6:32280/api/v1/provider"
+kubeConnection:
+  kubeconfig: "deploy/agent/test/idc/kubeconfig.yml"
+
+healthzBindAddr: 0.0.0.0:50062
+metricsBindAddr: 0.0.0.0:50062

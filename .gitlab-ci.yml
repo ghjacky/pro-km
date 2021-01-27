@@ -1,0 +1,61 @@
+variables:
+  REGISTRY: harbor.xxxxx.cn
+
+before_script:
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
+
+stages:
+  - build
+  - deploy
+
+build_server:
+  stage: build
+  only:
+    refs:
+      - master
+      - dev
+  interruptible: true
+  script:
+    - make REGISTRY=$REGISTRY server
+    - make REGISTRY=$REGISTRY push_server
+
+build_env:
+  stage: build
+  when: manual
+  only:
+    refs:
+      - master
+      - dev
+  interruptible: true
+  script:
+    - make REGISTRY=$REGISTRY env
+    - make REGISTRY=$REGISTRY push_env
+
+dp-server-idc:
+  when: manual
+  stage: deploy
+  only:
+    refs:
+      - master
+      - dev
+  script:
+    - make DEPLOY_HOST=$IDC_DEPLOY_HOST DEPLOY_SECRET=$DEPLOY_SECRET deploy
+
+dp-server-aly:
+  when: manual
+  stage: deploy
+  only:
+    refs:
+      - master
+  script:
+    - make DEPLOY_HOST=$ALY_DEPLOY_HOST DEPLOY_SECRET=$DEPLOY_SECRET deploy
+
+dp-server-bdy:
+  when: manual
+  stage: deploy
+  only:
+    refs:
+      - master
+  script:
+    - make DEPLOY_HOST=$BDY_DEPLOY_HOST DEPLOY_SECRET=$DEPLOY_SECRET deploy
+
